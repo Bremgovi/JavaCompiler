@@ -1,6 +1,7 @@
 package com.compiler;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.Stack;
 import static com.compiler.TokenType.*;
 
@@ -8,7 +9,7 @@ public class Execution {
     private final Stack<SymbolTable.Symbol> executionStack = new Stack<>();
     private final FunctionTable functionTable = new FunctionTable();
     private final SymbolTable symbolTable;
-
+    private final Scanner scanner = new Scanner(System.in);
     public Execution(SymbolTable symbolTable) {
         this.symbolTable = symbolTable;
     }
@@ -36,7 +37,9 @@ public class Execution {
                 processOperator(token.lexeme);
             } else if (token.type == PRINT) {
                 processPrint();
-            } else if (token.type == PROGRAM) {
+            } else if (token.type == INPUT) {
+                processInput();
+            }else if (token.type == PROGRAM) {
                 processProgram();
             } else if (token.type == IF) {
                 SymbolTable.Symbol address = executionStack.pop();
@@ -132,10 +135,31 @@ public class Execution {
 
         SymbolTable.Symbol value = executionStack.pop();
         if (value.type.equals("IDENTIFIER") && symbolTable.contains(value.lexeme)) {
-            System.out.println(symbolTable.get(value.lexeme).value.getValue());
+            System.out.print(symbolTable.get(value.lexeme).value.getValue());
         } else {
-            System.out.println(value.value.getValue());
+            System.out.print(value.value.getValue());
         }
+    }
+
+    private void processInput() {
+        if (executionStack.isEmpty()) {
+            throw new IllegalStateException("No variable to store input");
+        }
+
+        SymbolTable.Symbol variable = executionStack.pop();
+        String input = scanner.nextLine();
+
+        Object value;
+        String type;
+        try {
+            value = Double.parseDouble(input);
+            type = "NUMBER";
+        } catch (NumberFormatException e) {
+            value = input;
+            type = "STRING";
+        }
+
+        symbolTable.put(variable.lexeme, new SymbolTable.Symbol(variable.lexeme, type, new SymbolTable.Value(variable.lexeme, value, variable.value.getLine())));
     }
 
     private void processProgram() {

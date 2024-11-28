@@ -1,0 +1,6 @@
+var n;
+var m;
+input (n);
+input (m);
+print n;
+print m;

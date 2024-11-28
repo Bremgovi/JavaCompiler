@@ -1,9 +1,11 @@
 program factorial;
-var n = 15;
+var n;
+print("Ingrese un número para calcular su factorial: ");
+input(n);
 var factorial = 1;
 var i = 1;
 while ( i <= n ){
     factorial = factorial * i ;
     i = i + 1 ;
 }
-print(factorial) ;
+print("El factorial es: " + factorial) ;

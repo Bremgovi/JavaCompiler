@@ -1,4 +1,6 @@
 program fahrenheit;
-var celsius = 130;
+var celsius;
+print("Ingrese la temperatura en grados celsius: ");
+input(celsius);
 var fahrenheit = celsius * 9 / 5 + 32;
 print(celsius + " grados celsius son equivalentes a " + fahrenheit + " fahrenheit");

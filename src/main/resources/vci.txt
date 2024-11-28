@@ -1,2 +1,2 @@
 VCI: 
-[fahrenheit, program, celsius, 130, =, fahrenheit, celsius, 9, *, 5, /, 32, +, =, celsius, " grados celsius son equivalentes a ", +, fahrenheit, +, " fahrenheit", +, print]
+[sumaPares, program, suma, 0, =, temp, n, m, "Ingrese el primer número: ", print, n, input, temp, n, =, "Ingrese el segundo número: ", print, m, input, n, m, >, 28, IF, "El primer número debe ser menor que el segundo.", print, 66, ELSE, n, m, <=, 52, WHILE, n, 2, %, 0, ==, 45, IF, suma, suma, n, +, =, n, n, 1, +, =, 28, END, "La suma de los números pares entre ", temp, +, " y ", +, m, +, " es ", +, suma, +, ".", +, print]

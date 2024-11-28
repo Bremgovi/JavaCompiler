@@ -1,4 +1,6 @@
 ID                   Token Type      Value                D1         D2         PTR        Scope      Ambito    
 -------------------- --------------- -------------------- ---------- ---------- ---------- ---------- ----------
-celsius              NUMBER          130.0                0          0          null       Scope      fahrenheit
-fahrenheit           NUMBER          266.0                0          0          null       Scope      fahrenheit
+suma                 NUMBER          30.0                 0          0          null       Scope      sumaPares 
+temp                 NUMBER          2.0                  0          0          null       Scope      sumaPares 
+m                    NUMBER          10.0                 0          0          null       Scope      sumaPares 
+n                    NUMBER          11.0                 0          0          null       Scope      sumaPares 

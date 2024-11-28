@@ -36,6 +36,7 @@ public class VCI {
 
     private void processTokens() {
         List<Token> printTokens = new ArrayList<>();
+        List<Token> inputTokens = new ArrayList<>();
         boolean isIfBlock = false;
         boolean isWhileBlock = false;
         for (int i = 0; i < tokens.size(); i++) {
@@ -62,15 +63,21 @@ public class VCI {
                     VCI.addAll(printTokens);
                     printTokens.clear();
                 }
+                if(!inputTokens.isEmpty()){
+                    VCI.addAll(inputTokens);
+                    inputTokens.clear();
+                }
                 while (!operatorStack.isEmpty()) {
                     VCI.add(operatorStack.pop());
                 }
             } else if (token.type == PRINT) {
                 printTokens.add(token);
+            } else if (token.type == INPUT) {
+                inputTokens.add(token);
             } else if (token.type == PROGRAM) {
                 if (i + 1 < tokens.size() && tokens.get(i + 1).type == IDENTIFIER) {
-                    VCI.add(tokens.get(i + 1)); // Add the identifier before the program token
-                    i++; // Skip the identifier token
+                    VCI.add(tokens.get(i + 1));
+                    i++;
                 }
                 VCI.add(token);
             } else if (token.type == IF){
@@ -143,6 +150,7 @@ public class VCI {
         }
 
         VCI.addAll(printTokens);
+        VCI.addAll(inputTokens);
     }
 
     public List<Token> getVCI() {

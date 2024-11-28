@@ -1,5 +1,7 @@
 program primo;
-var n = 4;
+var n;
+print("Ingrese un número para determinar si es primo: ");
+input(n);
 var esPrimo = true;
 var divisor = 2;
 while (divisor < n and esPrimo) {

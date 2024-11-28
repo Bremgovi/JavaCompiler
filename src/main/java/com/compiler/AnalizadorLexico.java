@@ -23,7 +23,7 @@ public class AnalizadorLexico {
         keywords.put("null",    NULL);
         keywords.put("or",     OR);
         keywords.put("print",  PRINT);
-        keywords.put("return", RETURN);
+        keywords.put("input",  INPUT);
         keywords.put("true",   TRUE);
         keywords.put("var",    VAR);
         keywords.put("while",  WHILE);
@@ -56,22 +56,22 @@ public class AnalizadorLexico {
     private void scanToken() {
         char c = advance();
         switch (c) {
-            case '(' -> addToken(TokenType.LEFT_PAREN);
-            case ')' -> addToken(TokenType.RIGHT_PAREN);
-            case ',' -> addToken(TokenType.COMMA);
-            case '.' -> addToken(TokenType.DOT);
-            case '-' -> addToken(TokenType.MINUS);
-            case '+' -> addToken(TokenType.PLUS);
-            case ';' -> addToken(TokenType.SEMICOLON);
-            case '*' -> addToken(TokenType.MUL);
-            case '/' -> addToken(TokenType.DIV);
-            case '%' -> addToken(TokenType.MOD);
-            case '{' -> addToken(TokenType.LEFT_BRACE);
-            case '}' -> addToken(TokenType.RIGHT_BRACE);
-            case '!' -> addToken(match('=') ? TokenType.NOT_EQUAL : TokenType.NOT);
-            case '=' -> addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
-            case '<' -> addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
-            case '>' -> addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+            case '(' -> addToken(LEFT_PAREN);
+            case ')' -> addToken(RIGHT_PAREN);
+            case ',' -> addToken(COMMA);
+            case '.' -> addToken(DOT);
+            case '-' -> addToken(MINUS);
+            case '+' -> addToken(PLUS);
+            case ';' -> addToken(SEMICOLON);
+            case '*' -> addToken(MUL);
+            case '/' -> addToken(DIV);
+            case '%' -> addToken(MOD);
+            case '{' -> addToken(LEFT_BRACE);
+            case '}' -> addToken(RIGHT_BRACE);
+            case '!' -> addToken(match('=') ? NOT_EQUAL : NOT);
+            case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+            case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
+            case '>' -> addToken(match('=') ? GREATER_EQUAL : GREATER);
             case '"' -> string();
             case ' ', '\t', '\r' -> {}
             case '\n' -> line++;

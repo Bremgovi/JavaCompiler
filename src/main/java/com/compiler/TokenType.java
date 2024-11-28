@@ -29,6 +29,6 @@ public enum TokenType {
     // Especiales
     EOF,
     COMMENT,
-    ADDRESS, // Used to store jump addresses
-    EMPTY    // Placeholder token
+    ADDRESS,
+    EMPTY
 }
