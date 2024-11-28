@@ -96,7 +96,7 @@ public class Compilador {
             }
 
             for (Map.Entry<String, SymbolTable.Symbol> entry : symbolTable.getTable().entrySet()) {
-                writer.write("ID: " + entry.getKey() + " TOKEN: " + entry.getValue().type + " VALOR: " + entry.getValue().value + " D1: 0 " + " D2: 0 " + " PTR: null " + " AMBITO: " + ambito);
+                writer.write("ID: " + entry.getKey() + " TOKEN: " + entry.getValue().type + " VALOR: " + entry.getValue().value.getValue() + " D1: 0 " + " D2: 0 " + " PTR: null " + " AMBITO: " + ambito);
                 writer.newLine();
             }
 

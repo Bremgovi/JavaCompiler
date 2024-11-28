@@ -1,2 +1,2 @@
 VCI: 
-[X, 45, =, "Valor inicial: ", X, +, print, X, 20, 3, +, >, 21, IF, X, 30, 10, +, =, 26, else, X, 30, 10, -, =, "Valor final: ", X, +, print]
+[suma, 0, =, n, 2, =, temp, n, =, m, 10, =, n, m, >, 21, IF, "El primer número debe ser menor que el segundo.", print, 59, ELSE, n, m, <=, 45, WHILE, n, 2, %, 0, ==, 38, IF, suma, suma, n, +, =, n, n, 1, +, =, 21, END, "La suma de los números pares entre ", temp, +, " y ", +, m, +, " es ", +, suma, +, ".", +, print]

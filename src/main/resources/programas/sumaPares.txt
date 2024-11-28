@@ -1,6 +1,6 @@
 suma = 0;
+temp = 0;
 n = 2;
-temp = n;
 m = 10;
 
 if (n > m) {
@@ -12,5 +12,5 @@ if (n > m) {
         }
         n = n + 1;
     }
-    print("La suma de los números pares entre " + temp + " y " +  m + " es " + suma + ".");
+    print("La suma de los números pares entre ", m, " y ", n, " es ", suma, ".");
 }

@@ -23,7 +23,9 @@ public class Execution {
                 executionStack.push(new SymbolTable.Symbol(token.lexeme, "NUMBER", new SymbolTable.Value(null, Double.parseDouble(token.lexeme))));
             } else if (token.type == STRING) {
                 executionStack.push(new SymbolTable.Symbol(token.lexeme, "STRING", new SymbolTable.Value(null, token.literal)));
-            } else if (token.type == PLUS || token.type == MINUS || token.type == MUL || token.type == DIV ||
+            } else if (token.type == TRUE || token.type == FALSE) {
+                executionStack.push(new SymbolTable.Symbol(token.lexeme, "BOOLEAN", new SymbolTable.Value(null, Boolean.parseBoolean(token.lexeme))));
+            } else if (token.type == PLUS || token.type == MINUS || token.type == MUL || token.type == DIV || token.type == MOD ||
                     token.type == EQUAL || token.type == AND || token.type == OR || token.type == NOT ||
                     token.type == GREATER || token.type == GREATER_EQUAL || token.type == LESS ||
                     token.type == LESS_EQUAL || token.type == EQUAL_EQUAL || token.type == NOT_EQUAL) {
@@ -38,10 +40,21 @@ public class Execution {
                 boolean booleanCondition = (Boolean) condition.value.getValue();
                 if (!booleanCondition) {
                     i = Integer.parseInt(address.lexeme);
-                    System.out.println("Jumping to: " + i);
                     continue;
                 }
             } else if (token.type == ELSE) {
+                SymbolTable.Symbol address = executionStack.pop();
+                i = Integer.parseInt(address.lexeme);
+                continue;
+            } else if (token.type == WHILE) {
+                SymbolTable.Symbol address = executionStack.pop();
+                SymbolTable.Symbol condition = executionStack.pop();
+                boolean booleanCondition = (Boolean) condition.value.getValue();
+                if (!booleanCondition) {
+                    i = Integer.parseInt(address.lexeme);
+                    continue;
+                }
+            } else if (token.type == END) {
                 SymbolTable.Symbol address = executionStack.pop();
                 i = Integer.parseInt(address.lexeme);
                 continue;
@@ -59,10 +72,6 @@ public class Execution {
             boolean result = !(Boolean) a.value.getValue();
             executionStack.push(new SymbolTable.Symbol(String.valueOf(result), "BOOLEAN", new SymbolTable.Value(null, result)));
             return;
-        }
-
-        if (executionStack.size() < 2) {
-            throw new IllegalStateException("Not enough operands for the operator: " + operator);
         }
 
         SymbolTable.Symbol b = executionStack.pop();
@@ -95,16 +104,20 @@ public class Execution {
                 symbolTable.put(a.lexeme, new SymbolTable.Symbol(a.lexeme, b.type, b.value));
                 return;
             }
-            case "AND" -> result = (Boolean) a.value.getValue() && (Boolean) b.value.getValue();
-            case "OR" -> result = (Boolean) a.value.getValue() || (Boolean) b.value.getValue();
+            case "%" -> {
+                result = (Double) a.value.getValue() % (Double) b.value.getValue();
+                resultType = "NUMBER";
+            }
+            case "and" -> result = (Boolean) a.value.getValue() && (Boolean) b.value.getValue();
+            case "or" -> result = (Boolean) a.value.getValue() || (Boolean) b.value.getValue();
             case ">" -> result = (Double) a.value.getValue() > (Double) b.value.getValue();
             case ">=" -> result = (Double) a.value.getValue() >= (Double) b.value.getValue();
             case "<" -> result = (Double) a.value.getValue() < (Double) b.value.getValue();
             case "<=" -> result = (Double) a.value.getValue() <= (Double) b.value.getValue();
             case "==" -> result = a.value.getValue().equals(b.value.getValue());
             case "!=" -> result = !a.value.getValue().equals(b.value.getValue());
-        }
 
+        }
         executionStack.push(new SymbolTable.Symbol(result.toString(), resultType, new SymbolTable.Value(null, result)));
     }
 

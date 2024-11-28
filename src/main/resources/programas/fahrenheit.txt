@@ -1,0 +1,3 @@
+celsius = 130;
+fahrenheit = celsius * 9 / 5 + 32;
+print(celsius + " grados celsius son equivalentes a " + fahrenheit + " fahrenheit");

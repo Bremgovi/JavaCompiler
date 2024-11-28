@@ -22,9 +22,9 @@ public class VCI {
         operatorPrecedence.put("<=", 40);
         operatorPrecedence.put("==", 40);
         operatorPrecedence.put("!=", 40);
-        operatorPrecedence.put("NOT", 30);
-        operatorPrecedence.put("AND", 20);
-        operatorPrecedence.put("OR", 10);
+        operatorPrecedence.put("not", 30);
+        operatorPrecedence.put("and", 20);
+        operatorPrecedence.put("or", 10);
         operatorPrecedence.put("=", 0);
     }
 
@@ -37,6 +37,7 @@ public class VCI {
     private void processTokens() {
         List<Token> printTokens = new ArrayList<>();
         boolean isIfBlock = false;
+        boolean isWhileBlock = false;
         for (int i = 0; i < tokens.size(); i++) {
             Token token = tokens.get(i);
             if (token.type == IDENTIFIER || token.type == NUMBER || token.type == STRING) {
@@ -77,11 +78,25 @@ public class VCI {
                 isIfBlock = true;
             } else if (token.type == LEFT_BRACE){
                 if (isIfBlock) {
+                    if(isWhileBlock) isWhileBlock = false;
+                    while (!operatorStack.isEmpty()) {
+                        VCI.add(operatorStack.pop());
+                    }
                     Token emptyToken = new Token(EMPTY, "", null, 0);
                     VCI.add(emptyToken);
                     addressStack.push(VCI.indexOf(emptyToken));
                     VCI.add(new Token(IF, "IF", null, 0));
                 }
+                if(isWhileBlock){
+                    while (!operatorStack.isEmpty()) {
+                        VCI.add(operatorStack.pop());
+                    }
+                    Token emptyToken = new Token(EMPTY, "", null, 0);
+                    VCI.add(emptyToken);
+                    addressStack.push(VCI.size()-1);
+                    VCI.add(new Token(WHILE, "WHILE", null, 0));
+                }
+                isWhileBlock = true;
             }else if (token.type == RIGHT_BRACE){
                 if (!statementStack.isEmpty() && statementStack.peek().type == IF){
                     statementStack.pop();
@@ -93,14 +108,33 @@ public class VCI {
                         Token emptyToken = new Token(EMPTY, "", null, 0);
                         VCI.add(emptyToken);
                         addressStack.push(VCI.indexOf(emptyToken));
-                        VCI.add(tokens.get(i));
+                        VCI.add(new Token(ELSE, "ELSE", null, 0));
+                        i++;
                         isIfBlock = false;
+                    }else{
+                        int address = addressStack.pop();
+                        VCI.set(address, new Token(ADDRESS, String.valueOf(VCI.size()), null, 0));
                     }
                 } else if (!statementStack.isEmpty() && statementStack.peek().type == ELSE){
                     statementStack.pop();
                     int address = addressStack.pop();
                     VCI.set(address, new Token(ADDRESS, String.valueOf(VCI.size()), null, 0));
+                } else if (!statementStack.isEmpty() && statementStack.peek().type == WHILE){
+                    statementStack.pop();
+                    int address = addressStack.pop();
+                    VCI.set(address, new Token(ADDRESS,  String.valueOf(VCI.size()+2), null, 0));
+                    address = addressStack.pop();
+                    VCI.add(new Token(ADDRESS, String.valueOf(address), null, 0));
+                    VCI.add(new Token(END, "END", null, 0));
+                    isWhileBlock = false;
+
                 }
+            } else if (token.type == WHILE) {
+                statementStack.push(token);
+                addressStack.push(VCI.size());
+                isWhileBlock = true;
+            } else if (token.type == TRUE || token.type == FALSE || token.type == NULL) {
+                VCI.add(token);
             }
         }
 
