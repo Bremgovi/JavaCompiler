@@ -1,0 +1,9 @@
+X = 45;
+print("Valor inicial: " + X);
+if ( X > 20 + 3 ){
+    X = 30 + 10 ;
+}
+else {
+    X = 30 - 10 ;
+}
+print("Valor final: " + X);

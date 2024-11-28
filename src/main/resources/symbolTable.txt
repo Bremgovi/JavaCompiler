@@ -1,0 +1,1 @@
+ID: X TOKEN: NUMBER VALOR: Value{variableName='null', value=40.0} D1: 0  D2: 0  PTR: null  AMBITO: 

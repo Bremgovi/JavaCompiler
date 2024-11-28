@@ -1,0 +1,2 @@
+VCI: 
+[X, 45, =, "Valor inicial: ", X, +, print, X, 20, 3, +, >, 21, IF, X, 30, 10, +, =, 26, else, X, 30, 10, -, =, "Valor final: ", X, +, print]
