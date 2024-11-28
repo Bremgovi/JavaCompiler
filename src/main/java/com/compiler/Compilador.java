@@ -53,7 +53,8 @@ public class Compilador {
         writeTokensToFile(tokens, "src/main/resources/tokens.txt");
 
         SymbolTable symbolTable = new SymbolTable();
-        AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(tokens, symbolTable);
+        FunctionTable functionTable = new FunctionTable();
+        AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(tokens, symbolTable, functionTable);
         analizadorSemantico.analyze();
 
         VCI vci = new VCI(tokens);
@@ -63,18 +64,30 @@ public class Compilador {
         Execution execution = new Execution(symbolTable);
         execution.executeVCI(vciTokens);
         writeSymbolTableToFile(execution.getSymbolTable(), "src/main/resources/symbolTable.txt", execution.getFunctionTable());
-
+        writeAddressTableToFile(functionTable, vciTokens, "src/main/resources/addressTable.txt");
     }
 
     private static void writeTokensToFile(List<Token> tokens, String fileName) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            String format = "%-20s %-15s %-10s %-10s%n";
+            writer.write(String.format(format, "Token", "Lexeme", "Literal", "Line"));
+            writer.write(String.format(format, "--------------------", "---------------", "----------", "----------"));
             for (Token token : tokens) {
-                writer.write(token.toString());
-                writer.newLine();
+                String tokenType = truncate(token.type.toString(), 20);
+                String lexeme = truncate(token.lexeme, 15);
+                String literal = truncate(token.literal != null ? token.literal.toString() : "null", 10);
+                writer.write(String.format(format, tokenType, lexeme, literal, token.line));
             }
         } catch (IOException e) {
             System.err.println("Error writing tokens to file: " + e.getMessage());
         }
+    }
+
+    private static String truncate(String value, int length) {
+        if (value.length() > length) {
+            return value.substring(0, length - 3) + "...";
+        }
+        return value;
     }
 
     private static void writeVCIToFile(List<Token> tokens, String fileName) {
@@ -96,19 +109,46 @@ public class Compilador {
 
     private static void writeSymbolTableToFile(SymbolTable symbolTable, String fileName, FunctionTable functionTable) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            String format = "%-20s %-15s %-20s %-10s %-10s %-10s %-10s %-10s%n";
+            writer.write(String.format(format, "ID", "Token Type", "Value", "D1", "D2", "PTR", "Scope", "Ambito"));
+            writer.write(String.format(format, "--------------------", "---------------", "--------------------", "----------", "----------", "----------", "----------", "----------"));
             String ambito = "";
             for (Map.Entry<String, SymbolTable.Symbol> entry : functionTable.getTable().entrySet()) {
                 ambito = entry.getKey();
             }
 
             for (Map.Entry<String, SymbolTable.Symbol> entry : symbolTable.getTable().entrySet()) {
-                writer.write("ID: " + entry.getKey() + " TOKEN: " + entry.getValue().type + " VALOR: " + entry.getValue().value.getValue() + " D1: 0 " + " D2: 0 " + " PTR: null " + " AMBITO: " + ambito);
-                writer.newLine();
+                writer.write(String.format(format, entry.getKey(), entry.getValue().type, entry.getValue().value.getValue(), "0", "0", "null", "Scope", ambito));
             }
-
         } catch (IOException e) {
             System.err.println("Error writing symbol table to file: " + e.getMessage());
         }
+    }
+
+    private static void writeAddressTableToFile(FunctionTable functionTable, List<Token> vciTokens, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            String format = "%-20s %-15s %-10s %-10s%n";
+            writer.write(String.format(format, "ID", "Token Type", "Line", "Address"));
+            writer.write(String.format(format, "--------------------", "---------------", "----------", "----------"));
+            for (Map.Entry<String, SymbolTable.Symbol> entry : functionTable.getTable().entrySet()) {
+                String id = entry.getKey();
+                String tokenType = entry.getValue().type;
+                int line = entry.getValue().value.getLine();
+                int address = findAddressInVCI(vciTokens, id);
+                writer.write(String.format(format, id, tokenType, line, address));
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing address table to file: " + e.getMessage());
+        }
+    }
+
+    private static int findAddressInVCI(List<Token> vciTokens, String id) {
+        for (int i = 0; i < vciTokens.size(); i++) {
+            if (vciTokens.get(i).lexeme.equals(id)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public static void error(int line, String s) {

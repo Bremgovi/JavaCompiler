@@ -26,11 +26,13 @@ public class FunctionTable {
         String lexeme;
         String type;
         Object value;
+        int line;
 
-        public Symbol(String lexeme, String type, Object value) {
+        public Symbol(String lexeme, String type, Object value, int line) {
             this.lexeme = lexeme;
             this.type = type;
             this.value = value;
+            this.line = line;
         }
 
         @Override

@@ -1,2 +1,2 @@
 VCI: 
-[b, "hola ", 5, +, =, b, print]
+[fahrenheit, program, celsius, 130, =, fahrenheit, celsius, 9, *, 5, /, 32, +, =, celsius, " grados celsius son equivalentes a ", +, fahrenheit, +, " fahrenheit", +, print]

@@ -1,1 +1,4 @@
-ID: b TOKEN: STRING VALOR: hola 5.0 D1: 0  D2: 0  PTR: null  AMBITO: 
+ID                   Token Type      Value                D1         D2         PTR        Scope      Ambito    
+-------------------- --------------- -------------------- ---------- ---------- ---------- ---------- ----------
+celsius              NUMBER          130.0                0          0          null       Scope      fahrenheit
+fahrenheit           NUMBER          266.0                0          0          null       Scope      fahrenheit

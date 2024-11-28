@@ -1,11 +1,33 @@
-VAR var null -1 1
-IDENTIFIER b null -2 1
-EQUAL = null -1 1
-STRING "hola " hola  -1 1
-PLUS + null -1 1
-NUMBER 5 5.0 -1 1
-SEMICOLON ; null -1 1
-PRINT print null -1 2
-IDENTIFIER b null -2 2
-SEMICOLON ; null -1 2
-EOF  null -1 2
+Token                Lexeme          Literal    Line      
+-------------------- --------------- ---------- ----------
+PROGRAM              program         null       1         
+IDENTIFIER           fahrenheit      null       1         
+SEMICOLON            ;               null       1         
+VAR                  var             null       2         
+IDENTIFIER           celsius         null       2         
+EQUAL                =               null       2         
+NUMBER               130             130.0      2         
+SEMICOLON            ;               null       2         
+VAR                  var             null       3         
+IDENTIFIER           fahrenheit      null       3         
+EQUAL                =               null       3         
+IDENTIFIER           celsius         null       3         
+MUL                  *               null       3         
+NUMBER               9               9.0        3         
+DIV                  /               null       3         
+NUMBER               5               5.0        3         
+PLUS                 +               null       3         
+NUMBER               32              32.0       3         
+SEMICOLON            ;               null       3         
+PRINT                print           null       4         
+LEFT_PAREN           (               null       4         
+IDENTIFIER           celsius         null       4         
+PLUS                 +               null       4         
+STRING               " grados cel...  grados... 4         
+PLUS                 +               null       4         
+IDENTIFIER           fahrenheit      null       4         
+PLUS                 +               null       4         
+STRING               " fahrenheit"    fahren... 4         
+RIGHT_PAREN          )               null       4         
+SEMICOLON            ;               null       4         
+EOF                                  null       4         

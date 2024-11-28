@@ -1,3 +1,4 @@
+program sumaPares;
 var suma = 0;
 var temp = 0;
 var n = 2;

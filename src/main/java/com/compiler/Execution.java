@@ -21,14 +21,14 @@ public class Execution {
                 if (symbolTable.contains(token.lexeme)) {
                     executionStack.push(symbolTable.get(token.lexeme));
                 } else {
-                    executionStack.push(new SymbolTable.Symbol(token.lexeme, "IDENTIFIER", new SymbolTable.Value(token.lexeme, null)));
+                    executionStack.push(new SymbolTable.Symbol(token.lexeme, "IDENTIFIER", new SymbolTable.Value(token.lexeme, null, token.line)));
                 }
             } else if (token.type == NUMBER || token.type == ADDRESS) {
-                executionStack.push(new SymbolTable.Symbol(token.lexeme, "NUMBER", new SymbolTable.Value(null, Double.parseDouble(token.lexeme))));
+                executionStack.push(new SymbolTable.Symbol(token.lexeme, "NUMBER", new SymbolTable.Value(null, Double.parseDouble(token.lexeme), token.line)));
             } else if (token.type == STRING) {
-                executionStack.push(new SymbolTable.Symbol(token.lexeme, "STRING", new SymbolTable.Value(null, token.literal)));
+                executionStack.push(new SymbolTable.Symbol(token.lexeme, "STRING", new SymbolTable.Value(null, token.literal, token.line)));
             } else if (token.type == TRUE || token.type == FALSE) {
-                executionStack.push(new SymbolTable.Symbol(token.lexeme, "BOOLEAN", new SymbolTable.Value(null, Boolean.parseBoolean(token.lexeme))));
+                executionStack.push(new SymbolTable.Symbol(token.lexeme, "BOOLEAN", new SymbolTable.Value(null, Boolean.parseBoolean(token.lexeme), token.line)));
             } else if (token.type == PLUS || token.type == MINUS || token.type == MUL || token.type == DIV || token.type == MOD ||
                     token.type == EQUAL || token.type == AND || token.type == OR || token.type == NOT ||
                     token.type == GREATER || token.type == GREATER_EQUAL || token.type == LESS ||
@@ -74,7 +74,7 @@ public class Execution {
             }
             SymbolTable.Symbol a = executionStack.pop();
             boolean result = !(Boolean) a.value.getValue();
-            executionStack.push(new SymbolTable.Symbol(String.valueOf(result), "BOOLEAN", new SymbolTable.Value(null, result)));
+            executionStack.push(new SymbolTable.Symbol(String.valueOf(result), "BOOLEAN", new SymbolTable.Value(null, result, a.value.getLine())));
             return;
         }
 
@@ -122,7 +122,7 @@ public class Execution {
             case "!=" -> result = !a.value.getValue().equals(b.value.getValue());
 
         }
-        executionStack.push(new SymbolTable.Symbol(result.toString(), resultType, new SymbolTable.Value(null, result)));
+        executionStack.push(new SymbolTable.Symbol(result.toString(), resultType, new SymbolTable.Value(null, result, a.value.getLine())));
     }
 
     private void processPrint() {

@@ -24,10 +24,12 @@ public class SymbolTable {
     public static class Value {
         private final String variableName;
         private final Object value;
+        private final int line;
 
-        public Value(String variableName, Object value) {
+        public Value(String variableName, Object value, int line) {
             this.variableName = variableName;
             this.value = value;
+            this.line = line;
         }
 
         public String getVariableName() {
@@ -44,6 +46,10 @@ public class SymbolTable {
                     "variableName='" + variableName + '\'' +
                     ", value=" + value +
                     '}';
+        }
+
+        public int getLine() {
+            return line;
         }
     }
     public static class Symbol {
