@@ -1,7 +1,8 @@
-suma = 0;
-temp = 0;
-n = 2;
-m = 10;
+var suma = 0;
+var temp = 0;
+var n = 2;
+temp = n;
+var m = 10;
 
 if (n > m) {
     print("El primer número debe ser menor que el segundo.");
@@ -12,5 +13,5 @@ if (n > m) {
         }
         n = n + 1;
     }
-    print("La suma de los números pares entre ", m, " y ", n, " es ", suma, ".");
+    print("La suma de los números pares entre " + temp + " y " + m + " es " + suma + ".");
 }

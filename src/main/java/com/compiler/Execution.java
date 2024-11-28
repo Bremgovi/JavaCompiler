@@ -6,8 +6,12 @@ import static com.compiler.TokenType.*;
 
 public class Execution {
     private final Stack<SymbolTable.Symbol> executionStack = new Stack<>();
-    private final SymbolTable symbolTable = new SymbolTable();
     private final FunctionTable functionTable = new FunctionTable();
+    private final SymbolTable symbolTable;
+
+    public Execution(SymbolTable symbolTable) {
+        this.symbolTable = symbolTable;
+    }
 
     public void executeVCI(List<Token> vci) {
         int i = 0;

@@ -1,5 +1,6 @@
 package com.compiler;
 
+import javax.swing.*;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -19,9 +20,23 @@ public class Compilador {
             System.out.println("Ejecutando archivo: " + args[0]);
             runFile(args[0]);
         } else {
-            System.out.println("Ejecutando shell interactivo.");
-            runShell();
+            String filePath = selectFile();
+            if (filePath != null) {
+                System.out.println("Ejecutando archivo: " + filePath);
+                runFile(filePath);
+            } else {
+                System.out.println("No se seleccionó ningún archivo.");
+            }
         }
+    }
+
+    private static String selectFile() {
+        JFileChooser fileChooser = new JFileChooser("src/main/resources/programas");
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile().getPath();
+        }
+        return null;
     }
 
     // Ejecuta un archivo de código fuente.
@@ -31,30 +46,21 @@ public class Compilador {
         if (hadError) System.exit(65);
         if (hadRuntimeError) System.exit(70);
     }
-    // Ejecuta un shell interactivo.
-    private static void runShell() throws IOException {
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(input);
-        while(true) {
-            System.out.print("> ");
-            String line = reader.readLine();
-            if (line == null) break;
-            run(line);
-            hadError = false;
-        }
-    }
-
 
     private static void run(String source) throws IOException {
         AnalizadorLexico analizadorLexico = new AnalizadorLexico(source);
         List<Token> tokens = analizadorLexico.scanTokens();
         writeTokensToFile(tokens, "src/main/resources/tokens.txt");
 
+        SymbolTable symbolTable = new SymbolTable();
+        AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(tokens, symbolTable);
+        analizadorSemantico.analyze();
+
         VCI vci = new VCI(tokens);
         List<Token> vciTokens = vci.getVCI();
         writeVCIToFile(vciTokens, "src/main/resources/vci.txt");
 
-        Execution execution = new Execution();
+        Execution execution = new Execution(symbolTable);
         execution.executeVCI(vciTokens);
         writeSymbolTableToFile(execution.getSymbolTable(), "src/main/resources/symbolTable.txt", execution.getFunctionTable());
 
